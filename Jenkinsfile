@@ -2,14 +2,21 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Install MkDocs') {
             steps {
-                bat '.\\gradlew.bat build'
+                sh 'pip install mkdocs'
             }
         }
-        stage('Test') {
+
+        stage('Build README') {
             steps {
-                bat '.\\gradlew.bat test'
+                sh 'mkdocs build'
+            }
+        }
+
+        stage('Archive Site') {
+            steps {
+                archiveArtifacts artifacts: 'site/**', fingerprint: true
             }
         }
     }
